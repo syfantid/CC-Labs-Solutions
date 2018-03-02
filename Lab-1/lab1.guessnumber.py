@@ -11,6 +11,10 @@ def range_check(number, lower_bound, upper_bound):
 
 # Game to guess a random number between a specified range
 def random_number_game(lower_bound, upper_bound):
+    print('\nWelcome to Randomee! Let\'s see how good you are at guessing!\n')
+    name = input('What\'s your name? ')
+    print('\n')
+
     # Allows multiple games
     while True:
         random_number = random.randint(lower_bound, upper_bound)
@@ -33,14 +37,14 @@ def random_number_game(lower_bound, upper_bound):
             # Actual game logic
             number_guess += 1
             if guess == random_number:
-                print('Excellent guess! You succeeded in your ' + str(number_guess) + ' try!\n')
+                print('Excellent guess ' + name + '! You succeeded in your ' + str(number_guess) + ' try!\n')
                 break
             elif guess > random_number:
                 print('Sorry, number is too high. Try again!\n')
             else:
                 print('Sorry, number is too low. Try again!\n')
 
-        if number_guess == 5:
+        if number_guess == 6:
             print('Sorry you are out of tries. :(\n')
 
         # Allow user to play again
