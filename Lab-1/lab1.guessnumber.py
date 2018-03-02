@@ -4,7 +4,7 @@ import random
 while(True):
     random_number = random.randint(1, 20)
 
-    # Allows multiple guesses
+    # Allows multiple guesses15
     while(True):
         guess = int(input('Guess the number between 1 and 20: '))
         if(guess == random_number):
