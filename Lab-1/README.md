@@ -23,7 +23,10 @@ A step-by-step guide to download all the codes to your local machine.
 
 
 This project is also cloned to AWS instance. And tested by executing the program in this instance.
+![screenshot](https://user-images.githubusercontent.com/36756842/36945481-0c277c6a-1faf-11e8-8da4-fbb768bdec63.png)
 
 
 S3 bucket is created and repository is synchronized inside the bucket.
 
+
+![screenshot](https://user-images.githubusercontent.com/36756842/36945544-50e4d220-1fb0-11e8-8253-3119fda21e76.png)
