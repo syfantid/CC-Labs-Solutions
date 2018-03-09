@@ -38,7 +38,8 @@ Description: ITU Mathematics Engineering koalasevensarılgantiplerdenim
 
 ### Task 2.2.2: Accessing Tweets
 
-#### Home Timeline
+<details> 
+<summary><b>Home List</b></summary>
 
 ```json
 {
@@ -132,8 +133,10 @@ Description: ITU Mathematics Engineering koalasevensarılgantiplerdenim
   "contributors": null
 }
 ```
+</details>
 
-#### Friend list
+<details> 
+<summary><b>Friend list</b></summary>
 
 ```json
 {
@@ -218,9 +221,10 @@ Description: ITU Mathematics Engineering koalasevensarılgantiplerdenim
   "profile_image_url_https": "https://pbs.twimg.com/profile_images/951812515335467008/2Cf6U9X1_normal.jpg"
 }
 ```
+</details>
 
 <details> 
-<summary>#### User List</summary>
+<summary><b>User List</b></summary>
 
 ```json
 {
