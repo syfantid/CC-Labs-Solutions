@@ -576,7 +576,7 @@ time (only possibility is filtering after retrieval), we implemented a method to
 topic e.g. Cloud Computing on a specified language. Now the benefits of our tokenizer can be explored. Otherwise, we 
 could have simply filter out non-english tweets in an if statement in python using the field tweet.lang.
 
-```json
+```
 Original text: AntuanHernadezThe Breakup 2.0: Disconnecting over New Media: https://t.co/3h0WeuUh8t Quantum AI Big/Small/0 Data Cloud/Fog Computing OutLook from ClouData &amp; Multiverse -  https://t.co/cnCBNJdSIj
 ['AntuanHernadezThe', 'Breakup', '2.0', ':', 'Disconnecting', 'over', 'New', 'Media', ':', 'https://t.co/3h0WeuUh8t', 'Quantum', 'AI', 'Big', '/', 'Small', '/', '0', 'Data', 'Cloud', '/', 'Fog', 'Computing', 'OutLook', 'from', 'ClouData', '&', 'amp', ';', 'Multiverse', '-', 'https://t.co/cnCBNJdSIj']  
   
