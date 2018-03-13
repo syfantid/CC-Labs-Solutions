@@ -2,6 +2,7 @@
 
 ### Task 2.1.1: Word Count 1
 This task solely handles simple text tokenization and does not deal with stop words or punctuation elimination.
+The code to produce the following results can be found in file WordCountTensorFlow_1.py.
 
 #### Console Output - 10 Most Common Words
 [('the', 1343), (',', 1251), ('.', 810), (')', 638), ('(', 637), ('of', 586), ('to', 491), ('a', 468), (':', 454), ('in', 417)]
@@ -11,6 +12,7 @@ This task solely handles simple text tokenization and does not deal with stop wo
 
 ### Task 2.1.2: Remove Punctuation
 This task solely handles simple text tokenization and punctuation removal and does not deal with stop words.
+The code to produce the following results can be found in file WordCountTensorFlow_2.py.
 
 #### Console Output - 10 Most Common Words
 [('the', 1444), ('of', 586), ('to', 531), ('in', 506), ('a', 481), ('and', 346), ('is', 289), ('we', 279), ('that', 275), ('this', 268)]
@@ -19,7 +21,8 @@ This task solely handles simple text tokenization and punctuation removal and do
 19593
 
 ### Task 2.1.3: Stopwords
-This task solely handles simple text tokenization and punctuation removal and does not deal with stop words.
+This task handles simple text tokenization, punctuation removal and deals with stop words.
+The code to produce the following results can be found in file WordCountTensorFlow_3.py.
 
 #### Console Output - 10 Most Common Words
 [('tensorflow', 193), ('data', 102), ('tensor', 99), ('code', 90), ('learning', 81), ('function', 74), ('one', 73), ('use', 65), ('example', 64), ('available', 63)]
@@ -28,7 +31,7 @@ This task solely handles simple text tokenization and punctuation removal and do
 11220
 
 ### Task 2.2.1: Accessing your Twitter Account Information
-The output of this task is given below:
+The output of this task is acquired in file Twitter_1.py and is given below:
 
 Name: ozgekoroglu  
 Location: Barcelona, Spain  
@@ -37,6 +40,7 @@ Created: 2010-02-15 16:22:13
 Description: ITU Mathematics Engineering koalasevensarılgantiplerdenim  
 
 ### Task 2.2.2: Accessing Tweets
+A single json result is given per category as an example. It is possible to acquire multiple through the code in file Twitter_2.py.
 
 <details> 
 <summary><b>Home List</b></summary>
@@ -560,4 +564,20 @@ Description: ITU Mathematics Engineering koalasevensarılgantiplerdenim
 }
 ```
 </details>
+
+
+### Task 2.3: Tweet pre-processing
+In this task we added extra regular expressions to handle links with different domain (.gr,.es,.eu, etc.), e-mail addresses, 
+telephone numbers of various formats, dates of various formats, times, abbreviations and words with different apostrophe (’). 
+The output below was produced using the code in file Twitter_3.py.
+
+Given that Tweepy does not provide functionality to our knowledge to filter results based on language at retrieval 
+time (only possibility is filtering after retrieval), we implemented a method to retrieve tweets about a specified 
+topic e.g. Cloud Computing on a specified language. Now the benefits of our tokenizer can be explored. Otherwise, we 
+could have simply filter out non-english tweets in an if statement in python using the field tweet.lang.
+
+```
+
+```
+
 
