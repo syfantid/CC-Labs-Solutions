@@ -4,13 +4,16 @@ emoticons_str = r"(?:[<>]?[:;=8][\-o\*\'-]?[\)\]\(\[dDpP\/\:\>\<\}\{@\|\\]|[\)\]
 
 regex_str = [
     emoticons_str,
+    r'(?:[01]?[0-9]|2[0-3]):[0-5][0-9]',  # time
+    r'(?:\d{2})[\/.-](?:\d{2})[\/.-](?:\d{4})', #date format: dd-MM-yyyy and dd.MM.yyyy and dd/MM/yyyy
+    r'\d\d\s(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s\d{4}', #date time with 3 letter month name
     r'<[^>]+>',  # HTML tags
 
     r'(?:@[\w_]+)',  # @-mentions
 
     r"(?:\#+[\w_]+[\w\'_\-]*[\w_]+)",  # hash-tags
-
-    r'http[s]?://(?:[a-z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-f][0-9a-f]))+',  # URLs
+    r'(?:(?:http|https):\/\/)?(?:[-a-zA-Z0-9.]{2,256}\.[a-z]{2,15})\b(?:\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?',  # links
+    #r'http[s]?://(?:[a-z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-f][0-9a-f]))+',  # URLs
 
     # Phone numbers of 9 or 10 digits including optional country code in the following formats
     # (hyphens are optional and can be replaced by whitespace or no space):
@@ -24,7 +27,7 @@ regex_str = [
     r"\d{3}(?:\s?|[\-]?)\d{3}(?:\s?|[\-]?)\d{3})", # Format: xxx-xxx-xxx (9 digits)
 
     r"(?:[a-zA-Z]\.){2,}", # Abbreviations
-    
+    r'[\w.-]+@[\w.-]+',  # e-mails,
     r'(?:(?:\d+,?)+(?:\.?\d+)?)',  # numbers
     r"(?:[a-z][a-z'\-_]+[a-z])",  # words with - and '
     r'(?:[\w_]+)',  # other words
@@ -48,5 +51,5 @@ def preprocess(s, lowercase=False):
     return tokens
 
 
-tweet = 'RT @JordiTorresBCN: "just" :D U.S.A. an example! 08:00 www.google.weirddomain :D http://JordiTorres.Barcelona #masterMEI s.yfant._idou@upc.fib.edu CH4 www.google.com/query=love elpais.com/elpais2017 +30 6931 102082 +30 6931102082 +306931102082 0030 6931102082'
+tweet = 'RT @JordiTorresBCN:  10/03/2017 12.25.2016 10-09-1985 03 may 2014 03.02.12 "just" :D U.S.A. an example! 08:00 www.google.weirddomain www.fdksfd.com.tr :D http://JordiTorres.Barcelona #masterMEI s.yfant._idou@upc.fib.edu CH4 www.google.com/query=love elpais.com/elpais2017 +30 6931 102082 +30 6931102082 +306931102082 0030 6931102082'
 print(preprocess(tweet))
