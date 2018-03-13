@@ -576,8 +576,45 @@ time (only possibility is filtering after retrieval), we implemented a method to
 topic e.g. Cloud Computing on a specified language. Now the benefits of our tokenizer can be explored. Otherwise, we 
 could have simply filter out non-english tweets in an if statement in python using the field tweet.lang.
 
-```
+```json
+Original text: AntuanHernadezThe Breakup 2.0: Disconnecting over New Media: https://t.co/3h0WeuUh8t Quantum AI Big/Small/0 Data Cloud/Fog Computing OutLook from ClouData &amp; Multiverse -  https://t.co/cnCBNJdSIj
+['AntuanHernadezThe', 'Breakup', '2.0', ':', 'Disconnecting', 'over', 'New', 'Media', ':', 'https://t.co/3h0WeuUh8t', 'Quantum', 'AI', 'Big', '/', 'Small', '/', '0', 'Data', 'Cloud', '/', 'Fog', 'Computing', 'OutLook', 'from', 'ClouData', '&', 'amp', ';', 'Multiverse', '-', 'https://t.co/cnCBNJdSIj']  
+  
+Original text: mirandambaileyPython Chris Fehily: https://t.co/hQJkudx83v Quantum AI Big/Small/0 Data Cloud/Fog Computing OutLook from ClouData &amp; Multiverse -  https://t.co/cnCBNJdSIj
+['mirandambaileyPython', 'Chris', 'Fehily', ':', 'https://t.co/hQJkudx83v', 'Quantum', 'AI', 'Big', '/', 'Small', '/', '0', 'Data', 'Cloud', '/', 'Fog', 'Computing', 'OutLook', 'from', 'ClouData', '&', 'amp', ';', 'Multiverse', '-', 'https://t.co/cnCBNJdSIj']  
+  
+  
+Original text: The first European OGC Testbed &amp; IP Day - this Thurs, 15 March in London - will focus on Testbed-13 outcomes concerning: 2D &amp; 3D Vector Tiles; advances for DDIL environments; &amp; a Cloud Computing Environment for #EarthObservation Data https://t.co/cm33IfQm3r #OGCT13 https://t.co/7yM9M11Tbm
+['The', 'first', 'European', 'OGC', 'Testbed', '&', 'amp', ';', 'IP', 'Day', '-', 'this', 'Thurs', ',', '15', 'March', 'in', 'London', '-', 'will', 'focus', 'on', 'Testbed', '-', '13', 'outcomes', 'concerning', ':', '2', 'D', '&', 'amp', ';', '3', 'D', 'Vector', 'Tiles', ';', 'advances', 'for', 'DDIL', 'environments', ';', '&', 'amp', ';', 'a', 'Cloud', 'Computing', 'Environment', 'for', '#EarthObservation', 'Data', 'https://t.co/cm33IfQm3r', '#OGCT13', 'https://t.co/7yM9M11Tbm']
+  
 
+Original text: Services | Cloud Computing #SME #IT #Support #UK https://t.co/HF7TyQaTMt https://t.co/hIAZaDq8Ao
+['Services', '|', 'Cloud', 'Computing', '#SME', '#IT', '#Support', '#UK', 'https://t.co/HF7TyQaTMt', 'https://t.co/hIAZaDq8Ao']
+  
+
+Original text: annaisaburchConcise History Modern Cambridge Histories: https://t.co/KzanVIcRDQ Quantum AI Big/Small/0 Data Cloud/Fog Computing OutLook from ClouData &amp; Multiverse -  https://t.co/cnCBNJdSIj
+['annaisaburchConcise', 'History', 'Modern', 'Cambridge', 'Histories', ':', 'https://t.co/KzanVIcRDQ', 'Quantum', 'AI', 'Big', '/', 'Small', '/', '0', 'Data', 'Cloud', '/', 'Fog', 'Computing', 'OutLook', 'from', 'ClouData', '&', 'amp', ';', 'Multiverse', '-', 'https://t.co/cnCBNJdSIj']
+  
+
+Original text: RT @tribridge: Cloud computing is at the forefront of the shift to digital business. Discover the difference in a true cloud solution with…
+['RT', '@tribridge', ':', 'Cloud', 'computing', 'is', 'at', 'the', 'forefront', 'of', 'the', 'shift', 'to', 'digital', 'business', '.', 'Discover', 'the', 'difference', 'in', 'a', 'true', 'cloud', 'solution', 'with', '…']
+  
+
+Original text: ElsnerHuntOCM: Oracle Database 10g Administrator Certified Master Exam Guide: https://t.co/z7jkdoVWzj Quantum AI Big/Small/0 Data Cloud/Fog Computing OutLook from ClouData &amp; Multiverse -  https://t.co/cnCBNJdSIj
+['ElsnerHuntOCM', ':', 'Oracle', 'Database', '10', 'g', 'Administrator', 'Certified', 'Master', 'Exam', 'Guide', ':', 'https://t.co/z7jkdoVWzj', 'Quantum', 'AI', 'Big', '/', 'Small', '/', '0', 'Data', 'Cloud', '/', 'Fog', 'Computing', 'OutLook', 'from', 'ClouData', '&', 'amp', ';', 'Multiverse', '-', 'https://t.co/cnCBNJdSIj']
+  
+
+Original text: RT @Azure: Moving your enterprise to a #cloud computing strategy? Download our eBook to learn proven methods to take your #app portfolio to…
+['RT', '@Azure', ':', 'Moving', 'your', 'enterprise', 'to', 'a', '#cloud', 'computing', 'strategy', '?', 'Download', 'our', 'eBook', 'to', 'learn', 'proven', 'methods', 'to', 'take', 'your', '#app', 'portfolio', 'to', '…']
+  
+
+Original text: @elastifile Why it’s dicey to de-prioritize digital innovation
+https://t.co/rIx7kerW59 via cio https://t.co/VFoBmTwx7I
+['@elastifile', 'Why', 'it’s', 'dicey', 'to', 'de-prioritize', 'digital', 'innovation', 'https://t.co/rIx7kerW59', 'via', 'cio', 'https://t.co/VFoBmTwx7I']
+  
+
+Original text: RT @MercyTechnology: #Healthcare doesn't have to be so cautious about #cloud says @ScottRichert in this piece with @SearchHealthIT. The key…
+['RT', '@MercyTechnology', ':', '#Healthcare', "doesn't", 'have', 'to', 'be', 'so', 'cautious', 'about', '#cloud', 'says', '@ScottRichert', 'in', 'this', 'piece', 'with', '@SearchHealthIT', '.', 'The', 'key', '…']
 ```
 
 
