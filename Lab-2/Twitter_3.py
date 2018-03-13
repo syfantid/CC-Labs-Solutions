@@ -5,8 +5,11 @@ emoticons_str = r"(?:[<>]?[:;=8][\-o\*\'-]?[\)\]\(\[dDpP\/\:\>\<\}\{@\|\\]|[\)\]
 regex_str = [
     emoticons_str,
     r'<[^>]+>',  # HTML tags
+
     r'(?:@[\w_]+)',  # @-mentions
+
     r"(?:\#+[\w_]+[\w\'_\-]*[\w_]+)",  # hash-tags
+
     r'http[s]?://(?:[a-z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-f][0-9a-f]))+',  # URLs
 
     # Phone numbers of 9 or 10 digits including optional country code in the following formats
