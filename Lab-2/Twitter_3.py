@@ -26,6 +26,8 @@ regex_str = [
     r"(?:[a-z][a-z'\-_]+[a-z])",  # words with - and '
     r'(?:[\w_]+)',  # other words
     r'(?:\S)'  # anything else
+    r'[^@]+@[^@]+\.[^@]+ ' #e-mails
+
 ]
 
 tokens_re = re.compile(r'(' + '|'.join(regex_str) + ')', re.VERBOSE | re.IGNORECASE)
@@ -43,5 +45,5 @@ def preprocess(s, lowercase=False):
     return tokens
 
 
-tweet = 'RT @JordiTorresBCN: just an example! 08:00 www.google.weirddomain :D http://JordiTorres.Barcelona #masterMEI s.yfantidou@gmail.com CH4 www.google.com/query=love elpais.com/elpais2017 +306931102082 0030 6931102082'
+tweet = 'RT @JordiTorresBCN: just an example! 08:00 www.google.weirddomain :D http://JordiTorres.Barcelona #masterMEI s.yfant._idou@upc.fib.edu CH4 www.google.com/query=love elpais.com/elpais2017 +306931102082 0030 6931102082'
 print(preprocess(tweet))
