@@ -1,6 +1,10 @@
 import re
 from Twitter_1 import setup_twitter
 from Twitter_2 import get_tweets_about_topic
+import nltk
+nltk.download("stopwords")
+
+from nltk.corpus import stopwords
 
 
 emoticons_str = r"(?:[<>]?[:;=8][\-o\*\'-]?[\)\]\(\[dDpP\/\:\>\<\}\{@\|\\]|[\)\]\(\[dDpP\/\:\>\<\}\{@\|\\][\-o\*\'-]?[:;=8][<>]?|<3)"
@@ -44,12 +48,19 @@ emoticon_re = re.compile(r'^' + emoticons_str + '$', re.VERBOSE | re.IGNORECASE)
 def tokenize(s):
     return tokens_re.findall(s)
 
+def remove_stopwords(tokens):
+    sw = stopwords.words('english')
+    filtered = [w for w in tokens if not w.lower() in sw]
+    return filtered
 
 def preprocess(s, lowercase=False):
     tokens = tokenize(s)
     if lowercase:
         tokens = [token if emoticon_re.search(token) else token.lower() for token in tokens]
-    return tokens
+    for token in tokens: # Remove single-character tokens that are not alphanumeric (punctuation)
+        if len(token) <= 1 and not token.isdigit() and not token.isalnum():
+            tokens.remove(token)
+    return remove_stopwords(tokens) # return tokens without stopwords
 
 # Uncomment this block to test the functionality of the regex
 # tweet = 'RT @JordiTorresBCN:  10/03/2017 12.25.2016 10-09-1985 03 may 2014 03.02.12 "just" :D U.S.A. an example! 08:00 www.google.weirddomain www.fdksfd.com.tr :D http://JordiTorres.Barcelona #masterMEI s.yfant._idou@upc.fib.edu CH4 www.google.com/query=love elpais.com/elpais2017 +30 6931 102082 +30 6931102082 +306931102082 0030 6931102082'
