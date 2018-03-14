@@ -58,7 +58,8 @@ def preprocess(s, lowercase=False):
     if lowercase:
         tokens = [token if emoticon_re.search(token) else token.lower() for token in tokens]
     for token in tokens: # Remove single-character tokens that are not alphanumeric (punctuation)
-        if len(token) <= 1 and not token.isdigit() and not token.isalnum():
+        #print(token + '\n')
+        if len(token) <= 1 and not token.isalnum():
             tokens.remove(token)
     return remove_stopwords(tokens) # return tokens without stopwords
 
@@ -72,6 +73,7 @@ def preprocess(s, lowercase=False):
 # could have simply filter out non-english tweets in an if statement in python using the field tweet.lang.
 def main():
     api = setup_twitter()
+    print(len("“"))
     tweets = get_tweets_about_topic(10,'Cloud Computing',api)
     for tweet in tweets:
         print('Original text: ' + tweet.full_text)
