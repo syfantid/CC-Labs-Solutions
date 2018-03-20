@@ -3,6 +3,8 @@ import pandas as pd
 import json
 import os
 import plotly
+import sys
+sys.path.insert(0,'/home/ozge/CC-Labs-Solutions/Lab-2')
 from plotly.plotly import plot
 
 plotly.tools.set_credentials_file(username = os.environ.get('PLOTLY_USERNAME'), api_key = os.environ.get('PLOTLY_KEY'))
@@ -10,7 +12,7 @@ import numpy
 import re
 
 import textblob
-
+from Twitter_3 import preprocess
 
 def getTweets(file):
     tweets_data = []
@@ -87,7 +89,8 @@ def getState(location):
     return ""
 
 def SentimentalAnalysis(tweet):
-    polarity = round(textblob.TextBlob(tweet).sentiment.polarity, 4)
+    preprocessed_tweet=preprocess(tweet)
+    polarity = round(textblob.TextBlob(preprocessed_tweet).sentiment.polarity, 4)
     return polarity
 
 # Calculate the average sentiment polarity per US state
