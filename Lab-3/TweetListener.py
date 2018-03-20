@@ -9,7 +9,7 @@ class MyListener(StreamListener):
 
     def on_data(self, data):
         try:
-            with open('trump.json', 'a') as f:
+            with open('CambridgeAnalytica.json', 'a') as f:
                 print(data)
                 f.write(data)
                 return True
@@ -35,5 +35,5 @@ class MyListener(StreamListener):
 listener = MyListener()
 auth = listener.connect_twitter()
 twitter_stream = Stream(auth, MyListener())
-twitter_stream.filter(track=['trump'],languages=['en'])
+twitter_stream.filter(track=['#CambridgeAnalytica'],languages=['en'])
 #twitter_stream.filter(languages=['en'])

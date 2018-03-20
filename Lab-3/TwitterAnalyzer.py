@@ -7,6 +7,8 @@ import matplotlib as mpl
 mpl.rcParams['figure.figsize'] = (6,6)
 import matplotlib.pyplot as plt
 
+from nltk.sentiment.vader import SentimentIntensityAnalyzer as sentiment
+
 from Twitter_3 import preprocess
 
 def open_file(file_name):
@@ -63,6 +65,9 @@ def create_chart(counter, fig_name):
     #plt.show()  # show it on IDE
 
     plt.savefig(fig_name)  # save it on a file
+
+def calculate_sentiment():
+
 
 # Hawking case
 top_terms,top_hashtags,top_terms_no_mentions_hashtags = count_frequencies('Hawking.json')
