@@ -46,3 +46,10 @@ Top ten most frequent terms, skipping mentions and hashtags:
 ![alt text](/home/sofia/PycharmProjects/Labs-solutions/Lab-3/barca.png)
 #Hawking Case
 ![alt text](/home/sofia/PycharmProjects/Labs-solutions/Lab-3/hawking.png)
+
+##Task 3.4: Student Proposal
+For this task we streamed tweets regarding 'refugees' and filtered based on language (English) 
+and location (U.S.A.). Then we calculated the sentiment polarity per tweet and the average sentiment
+polarity per U.S.A. state. Finally we [visualized the sentiment polarity on a map](https://plot.ly/~s.yfantidou/4/sentiment-polarity-about-refugees-by-state-hover-for-breakdown/) with light 
+green states being more positive towards refugees and dark green states being more negative 
+towards them.

@@ -3,7 +3,8 @@ import pandas as pd
 import json
 import os
 import plotly
-from plotly.plotly import plot
+# from plotly.plotly import plot
+from plotly.offline import download_plotlyjs, init_notebook_mode, plot, iplot
 
 plotly.tools.set_credentials_file(username = os.environ.get('PLOTLY_USERNAME'), api_key = os.environ.get('PLOTLY_KEY'))
 import numpy
@@ -61,7 +62,7 @@ def ConvertJsonToTable(filename):
             rows_list.append(dict1)
 
     tweets = pd.DataFrame(rows_list)
-    print(tweets.head(10))
+    # print(tweets.head(10))
     return tweets
 
 # Get US state based on tweet's location; if tweet posted outside of the US get emty string
@@ -76,6 +77,7 @@ def getState(location):
 
     # Match state
     regex = r"(?:\w+),\s*([a-zA-Z]{2}\b)"
+    # print(location)
     matches = re.finditer(regex, location)
 
     for match in matches:
@@ -102,16 +104,80 @@ def GetAveragePolarityPerState(filename):
 
     return pd.DataFrame(state_tweets)
 
+
+def getStateFromCode(state_codes):
+    us_state_abbrev = {
+        'AK': 'Alaska',
+        'NH': 'New Hampshire',
+        'CA': 'California',
+        'CT': 'Connecticut',
+        'AL': 'Alabama',
+        'OH': 'Ohio',
+        'NM': 'New Mexico',
+        'WV': 'West Virginia',
+        'ND': 'North Dakota',
+        'IL': 'Illinois',
+        'VT': 'Vermont',
+        'MN': 'Minnesota',
+        'NV': 'Nevada',
+        'KS': 'Kansas',
+        'OK': 'Oklahoma',
+        'ME': 'Maine',
+        'PA': 'Pennsylvania',
+        'NY': 'New York',
+        'FL': 'Florida',
+        'MD': 'Maryland',
+        'UT': 'Utah',
+        'TN': 'Tennessee',
+        'MT': 'Montana',
+        'HI': 'Hawaii',
+        'WA': 'Washington',
+        'MA': 'Massachusetts',
+        'VA': 'Virginia',
+        'AR': 'Arkansas',
+        'WI': 'Wisconsin',
+        'CO': 'Colorado',
+        'IN': 'Indiana',
+        'SD': 'South Dakota',
+        'LA': 'Louisiana',
+        'RI': 'Rhode Island',
+        'AZ': 'Arizona',
+        'NJ': 'New Jersey',
+        'KY': 'Kentucky',
+        'MI': 'Michigan',
+        'ID': 'Idaho',
+        'NC': 'North Carolina',
+        'WY': 'Wyoming',
+        'MO': 'Missouri',
+        'IA': 'Iowa',
+        'OR': 'Oregon',
+        'TX': 'Texas',
+        'SC': 'South Carolina',
+        'GA': 'Georgia',
+        'DE': 'Delaware',
+        'NE': 'Nebraska',
+        'MS': 'Mississippi'
+    }
+
+    state_names = []
+    for state_code in state_codes:
+        state_names.append(us_state_abbrev.get(state_code))
+    return pd.Series(state_names)
+
+
 def PlotSentiment(filename):
     df = GetAveragePolarityPerState(filename)
 
     for col in df.columns:
         df[col] = df[col].astype(str)
 
-    scl = [[0.0, 'rgb(242,240,247)'], [0.2, 'rgb(218,218,235)'], [0.4, 'rgb(188,189,220)'], \
-           [0.6, 'rgb(158,154,200)'], [0.8, 'rgb(117,107,177)'], [1.0, 'rgb(84,39,143)']]
+    # scl = [[0.0, 'rgb(242,240,247)'], [0.2, 'rgb(218,218,235)'], [0.4, 'rgb(188,189,220)'], \
+    #        [0.6, 'rgb(158,154,200)'], [0.8, 'rgb(117,107,177)'], [1.0, 'rgb(84,39,143)']]
 
-    df['text'] = df['state'] + '<br>' + \
+    scl = [[0.0, 'rgb(6,17,9)'], [0.2, 'rgb(22,54,32)'], [0.4, 'rgb(53,125,77)'], \
+        [0.6, 'rgb(94,186,125)'], [0.8, 'rgb(166,217,183)'], [1.0, 'rgb(219,240,226)']]
+
+    df['text'] = getStateFromCode(df['state']) + '<br>' + \
                  'Polarity ' + df['polarity']
 
     data = [dict(
@@ -144,4 +210,4 @@ def PlotSentiment(filename):
     plot(fig, filename='d3-cloropleth-map')
 
 
-PlotSentiment('metoo.json')
+PlotSentiment('refugees.json')
