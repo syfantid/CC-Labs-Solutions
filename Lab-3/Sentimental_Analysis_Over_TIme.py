@@ -11,7 +11,7 @@ import numpy
 import re
 
 import textblob
-
+from Twitter_3 import preprocess
 
 def getTweets(file):
     tweets_data = []
@@ -77,7 +77,6 @@ def getState(location):
 
     # Match state
     regex = r"(?:\w+),\s*([a-zA-Z]{2}\b)"
-    # print(location)
     matches = re.finditer(regex, location)
 
     for match in matches:
@@ -89,7 +88,8 @@ def getState(location):
     return ""
 
 def SentimentalAnalysis(tweet):
-    polarity = round(textblob.TextBlob(tweet).sentiment.polarity, 4)
+    preprocessed_tweet=preprocess(tweet)
+    polarity = round(textblob.TextBlob(preprocessed_tweet).sentiment.polarity, 4)
     return polarity
 
 # Calculate the average sentiment polarity per US state
