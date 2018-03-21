@@ -11,7 +11,7 @@ import numpy
 import re
 
 import textblob
-from Twitter_3 import preprocess
+from TwitterPreprocessing import preprocess
 
 def getTweets(file):
     tweets_data = []
@@ -88,7 +88,8 @@ def getState(location):
     return ""
 
 def SentimentalAnalysis(tweet):
-    preprocessed_tweet=preprocess(tweet)
+    preprocessed_tweet = ' '.join(preprocess(tweet))
+    # print(preprocessed_tweet)
     polarity = round(textblob.TextBlob(preprocessed_tweet).sentiment.polarity, 4)
     return polarity
 
