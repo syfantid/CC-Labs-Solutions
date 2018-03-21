@@ -1,4 +1,4 @@
-## Task 3.2: Analyzing tweets - Counting terms
+# Task 3.2: Analyzing tweets - Counting terms
 
 Top ten most frequent tokens :
 
@@ -41,13 +41,13 @@ Top ten most frequent terms, skipping mentions and hashtags:
 9. Accessibility : 36
  10. Death : 36
 
-##Task 3.3: Case study
-#Barcelone Case
+# Task 3.3: Case study
+## Barcelone Case
 ![alt text](/home/sofia/PycharmProjects/Labs-solutions/Lab-3/barca.png)
-#Hawking Case
+## Hawking Case
 ![alt text](/home/sofia/PycharmProjects/Labs-solutions/Lab-3/hawking.png)
 
-##Task 3.4: Student Proposal
+# Task 3.4: Student Proposal
 For this task we streamed tweets regarding 'refugees' and filtered based on language (English) 
 and location (U.S.A.). Then we calculated the sentiment polarity per tweet and the average sentiment
 polarity per U.S.A. state. Finally we [visualized the sentiment polarity on a map](https://plot.ly/~s.yfantidou/4/sentiment-polarity-about-refugees-by-state-hover-for-breakdown/) with light 
