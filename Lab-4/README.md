@@ -12,9 +12,10 @@ The following screenshot captures the deployed application.
 
 ### Our answers
 When we **terminated the EC2 instance**, the EBS recognised it as a "health" issue/risk (missing instance). However, 
-it immediately ran a second instance to restore "health" and keep the web app running.
+it immediately ran a second instance to restore "health" and keep the web app running. This is happening because Elastic Beanstalk includes an Auto Scaling group that manages the Amazon EC2 instances in our environment. In a single-instance environment, the Auto Scaling group ensures that there is always one instance running. So, every time we terminated the EC2 instance, Beanstalk recreated one to comform to this restriction.
+
 On the contrary, when we **terminated the environment from the EBS console**, the instance was terminated as well.
-This is logical since that the sole purpose of the instance was to serve the deployed app.
+This is logical since that the sole purpose of the instance was to serve the deployed app. This is happening because the moment you terminate the environment you terminate the auto scaling group as well, which means that Elastic Beanstalk is not triggering instance recreation operations anymore.
 
 ### Additional Information
 We worked on this session for approximately 3 hours in total. 
