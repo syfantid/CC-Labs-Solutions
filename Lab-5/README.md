@@ -40,6 +40,7 @@ To be more efficient in search page, we created another table in DynamoDb called
 
 The logic of the new implemented code is; whenever we are adding something to our main table 'gsg-signup-table', domain and preview information is also being added to 'Domain' table. In this 'Domain' table, if the same key exist, the code is incrementing the count of that key, if it is not existed before then it assigns value 1 to the count_domain.
 
+![Domain Table](img/Domain_Table.png)
 
 
 ## Task 5.4: Deliver static content using a Content Delivery Network
