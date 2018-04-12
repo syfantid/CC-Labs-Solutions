@@ -33,7 +33,14 @@ However, we faced one challenge during this task:
 
 ![IAM Console](img/scanAction.png)
 
+
 ## Task 5.3: Improve the web app transfer of information (optional)
+
+To be more efficient in search page, we created another table in DynamoDb called 'Domain'. Domain table keeps the domain of the email adress, preview selection as composite key. This key creation was selected even though in the application preview has no use in search but since we have the preview filter in the html code we decided for the future use for filtering we need to count based on domain and also preview. To be efficient in aggregation we also keep count_domain attribute in 'Domain' table. This prevents table scan in counting. 
+
+The logic of the new implemented code is; whenever we are adding something to our main table 'gsg-signup-table', domain and preview information is also being added to 'Domain' table. In this 'Domain' table, if the same key exist, the code is incrementing the count of that key, if it is not existed before then it assigns value 1 to the count_domain.
+
+
 
 ## Task 5.4: Deliver static content using a Content Delivery Network
 
