@@ -27,6 +27,13 @@ Moreover, to allow updates on the Domain table (e.g. after a new signup a domain
 ### Q61b: Once you have your solution implemented publish the changes to EB and try the new functionality in the cloud. Did you need to change anything, apart from the code, to make the web app work?
 
 We added software configuration related to CloudFront and S3 bucket to EB. A printscreen of the deployed app can be seen below.
+
+Specifying domain name and preview (Same domain name, different preview parameter):
+![yes](img/domprevyes.png)
+
+![no](img/prevdomno.png)
+
+No parameters:
 ![Chart](img/chart.png)
 
 ## Task 6.2: How to provide our service combined with third-party services?
