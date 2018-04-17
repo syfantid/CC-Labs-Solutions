@@ -22,6 +22,8 @@ CORS Configuration:
 </CORSConfiguration>
 ```
 
+![edit_behaviour_cloudfront](img/edit_behaviour_cloudFront.png)
+
 Moreover, to allow updates on the Domain table (e.g. after a new signup a domain count may need to increment) we needed to adjust our policy to allow UpdateItem action for DynamoDB.
 
 #### Q61b: Once you have your solution implemented publish the changes to EB and try the new functionality in the cloud. Did you need to change anything, apart from the code, to make the web app work?
