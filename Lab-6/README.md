@@ -4,31 +4,19 @@
 
 #### Q61a: Having domain_freq.json written as static content is not the best way to distribute it because different clients can invoke different parameters simultaneously? Can you use S3 to solve the problem? Write the changes in the code and explain your solution?
 
-Yes S3 can be used to solve this problem. The problem is by default, CloudFront doesn't consider headers when caching objects in edge locations. If origin returns two objects and they differ only by the values in the request headers, CloudFront caches only one version of the object. 
+Yes, it is problematic to save the domain files as static content, because in reality they depend on the user's query. This mean that if 100 users perform 100 different queries, then 100 files will be created in our static folder and our site will be too heavy to load in the browser. However, if we use S3 all these files will be uploaded in S3 and the wep application will simply access them from there (no extra load). 
 
-To solve this issue, we first uploaded static contents into s3 bucket and created CloudFront distrubution of that bucket. To enable cross-domain access in CLoudFront, we attached CORS configuration to static content bucket because CORS finds a way for client web applications that are loaded in one domain to interact with resources in a different domain. After that  we enabled Header Forwarding in CloudFront distrubution that's associated with the S3 bucket. By doing that we made CloudFront to forward all headers to our origin.
+To achieve this the moment the user requests the domain frequencies a file is being created in S3 with a name representative of the user's query e.g. domain_freq_gmail_no.json (for domain gmail.com and preview access specified as no) or domain_freq.json (no parameters specified), etc. The file contains a JSON which reflects the current state of the Domain DynamoDB table (table in the form of (key,pair) or ([domain,preview access], frequency). For each user request a new file is being created because there might be insertions or updates in the table between different users' requests (even if the request is the same).
 
-CORS Configuration: 
-```xml
-<?xml version="1.0" encoding="UTF-8"?>
-<CORSConfiguration xmlns="http://s3.amazonaws.com/doc/2006-03-01/">
-<CORSRule>
-    <AllowedOrigin>http://*</AllowedOrigin>
-    <AllowedOrigin>https://*</AllowedOrigin>
-    <AllowedMethod>GET</AllowedMethod>
-    <MaxAgeSeconds>3000</MaxAgeSeconds>
-    <AllowedHeader>*</AllowedHeader>
-</CORSRule>
-</CORSConfiguration>
-```
+Thus, instead of rendering contents from a static file in the chart.html template, we now render contents from the S3 file. Of course our bucket has public read access.
 
-![edit_behaviour_cloudfront](img/edit_behaviour_cloudFront.png)
+Moreover, we chose not to distribute the domain files through CloudFront because their content is updated constantly and it would not be efficient to update the distributions for every user query.
 
-Moreover, to allow updates on the Domain table (e.g. after a new signup a domain count may need to increment) we needed to adjust our policy to allow UpdateItem action for DynamoDB.
+Finally, to allow updates on the Domain table (e.g. after a new signup a domain count may need to increment) we needed to adjust our policy to allow UpdateItem action for DynamoDB.
 
 #### Q61b: Once you have your solution implemented publish the changes to EB and try the new functionality in the cloud. Did you need to change anything, apart from the code, to make the web app work?
 
-We added software configuration related to CloudFront and S3 bucket to EB. A printscreen of the deployed app can be seen below.
+We added software configuration related to CloudFront and S3 bucket to EB (to be used for both map and chart rendering). A printscreen of the deployed app can be seen below.
 
 Specifying domain name and preview (Same domain name, different preview parameter):
 ![yes](img/domprevyes.png)
@@ -46,11 +34,31 @@ Using a GET request we obtain the requested `from_date` and `to_date` from the U
 
 #### Q62b: Make the necessary changes to have geo_data.json distributed using S3, or the method you used for the above section. Publish your changes to EB and explain what changes have you made to have this new function working.
 
-`geo_data.json` is not a static content file. It changes depending on the user's query. That's why we save multiple files in S3, whose names are representative of the queries they derive from. For instance, for a range between Tue, 17 Apr 2018 19:37:18 GMT (epoch timestamp: 1523993839) and  Wednesday, April 18, 2018 7:37:18 PM (epoch timestamp: 1523993931), the filename would be 1523993839-1523993931.json (See caption below). This way if a user requests the same date range the database will not be queried again, but the result will come from S3. If the query is unbounded then we use the system's minimum and maximum timestamps. This process can be found in `view.py`. Note here that for every user request the application will first look for an equivalent file in S3 and if the file is not found it will query the database return the results and write a new file to S3 for the specific timeframe.
+`geo_data.json` is not a static content file. It changes depending on the user's query. That's why we save multiple files in S3, whose names are representative of the queries they derive from. For instance, for a range between Tue, 17 Apr 2018 19:37:18 GMT (epoch timestamp: 1523993839) and  Wednesday, April 18, 2018 7:37:18 PM (epoch timestamp: 1523993931), the filename would be 1523993839-1523993931.json (See caption below). This way if a user requests the same date range the database will not be queried again, but the result will come from S3. This happens because the tweets that belong to a specific range are not changing. If the query is unbounded then we use the system's minimum and current timestamps. This process can be found in `view.py`. Note here that for every user request the application will first look for an equivalent file in S3 and if the file is not found it will query the database return the results and write a new file to S3 for the specific timeframe.
 
 ![json date files](img/mapss3.png)
 
-To make this work, we needed to adjust the new buckets CORS configuration again as mentioned above to prevent Cross-Origin Resource Sharing related problems. Also we attached the following Bucket Policy to our S3 Bucket to allow public access to objects, because declaring the bucket as public did not impose public read access to its objects.
+For this bucket we consider that enabling CloudFront distribution would be more efficient, because the contents of the created files never change. 
+
+To enable cross-domain access in CLoudFront, we attached a CORS configuration to the S3 bucket, because CORS enables a client web application that are loaded in one domain to interact with resources in a different domain (preventing Cross-Origin Resource Sharing related problems). After that  we enabled Header Forwarding in CloudFront distrubution that is associated with the our S3 bucket. By doing that, CloudFront now forwards all headers to our origin.
+
+CORS Configuration: 
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<CORSConfiguration xmlns="http://s3.amazonaws.com/doc/2006-03-01/">
+<CORSRule>
+    <AllowedOrigin>http://*</AllowedOrigin>
+    <AllowedOrigin>https://*</AllowedOrigin>
+    <AllowedMethod>GET</AllowedMethod>
+    <MaxAgeSeconds>3000</MaxAgeSeconds>
+    <AllowedHeader>*</AllowedHeader>
+</CORSRule>
+</CORSConfiguration>
+```
+
+![edit_behaviour_cloudfront](img/edit_behaviour_cloudFront.png)
+
+Also, we attached the following Bucket Policy to our S3 Bucket to allow public access to objects, because declaring the bucket as public did not impose public read access to its objects.
 
 ```xml
 {
@@ -77,6 +85,10 @@ Unbounded Query:
 
 No parameters:
 ![no parameters](img/map.png)
+
+In the following picture it is clearly shown how CloudFront is enabled for the static content S3 bucket containing the CSS and image files (eb-django-express-signup-423127002349.s3.amazonaws.com) and the maps' files bucket (map-jsons-dump.s3.amazonaws.com) but is disabled for the domain bucket (domain-bucket-43127002349.s3.amazonaws.com).
+
+![cloudfront](img/cloudfront.png)
 
 #### Q62c: How would you run TwitterListener.py in the cloud instead of locally? Try to implement your solution and explain what problems have you found and what solutions have you implemented.
 
