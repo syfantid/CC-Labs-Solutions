@@ -4,7 +4,8 @@ import os
 from venv import logger
 
 import googleapiclient.discovery
-from tweepy import OAuthHandler
+import tweepy
+from tweepy import OAuthHandler, api
 from tweepy import Stream
 from tweepy.streaming import StreamListener
 import json
@@ -16,18 +17,20 @@ import plotly.graph_objs as go
 py.plotly.tools.set_credentials_file(username = os.environ.get('PLOTLY_USERNAME'), api_key = os.environ.get('PLOTLY_KEY'))
 
 TAG_TABLE = 'twitter-images'
-AWS_REGION = 'eu-west-3'
+AWS_REGION = 'eu-west-1'
 
 
 def get_image_from_tweet(status):
-    media_list = list() # in case a single tweet contains more than one image
-    if 'media' in status['extended_entities']:
-        for media in status['extended_entities']['media']:
-            if media['type'] == 'photo':
-                # print('\n' + status['text'])  # print uri of status
+    a=json.loads(status)
+    media_list = list()  # in case a single tweet contains more than one image
+    if 'extended_entities' in a:
+        for media in a['extended_entities']['media']:
+            if 'media' in a['extended_entities'] and media['type'] == 'photo':
                 image_uri = media['media_url']
                 media_list.append(image_uri)
+
     return media_list
+
 
 def get_tags(image_uri):
     """Run a label request on a single image"""
@@ -94,11 +97,10 @@ def plot_tags():
 
     tweets = get_tweets_from_db()
     tag_scores = {}
-
     for tweet in tweets:
         print(tweet)
         for tweet_tags in tweet['tags']:
-            tweet_tags_dict = json.loads("[" + tweet_tags + "]")
+            tweet_tags_dict = json.loads(tweet_tags)
             for tag,score in tweet_tags_dict.items():
                 if not tag in tag_scores:
                     tag_scores[tag] = score
@@ -128,21 +130,16 @@ class MyListener(StreamListener):
             print('\nError connecting to database table: ' + (e.fmt if hasattr(e, 'fmt') else '') + ','.join(e.args))
             sys.exit(-1)
 
-    def on_data(self, data):
-        tweet = json.loads(data)
-        if 'extended_entities' not in tweet:
-            sys.stdout.write('.')
-            sys.stdout.flush()
-            return True
+    def get_tweets(self, data):
+        tweet = json.dumps(data)
+        a=json.loads(tweet)
 
         image_list = get_image_from_tweet(tweet)
-
         tags_response = ""
         for image in image_list:
             # Check if we gathered 100 images already
             self.image_counter += 1
             if (self.image_counter > 100):
-                self.twitter_stream.stop()
                 break
 
             tags_response = get_tags(image)
@@ -155,7 +152,7 @@ class MyListener(StreamListener):
                 try:
                     response = self.table.put_item(
                         Item={
-                            'tweet_id': tweet['id_str'],
+                            'tweet_id': a['id_str'],
                             'image_uri': image,
                             'tags:' : tags_json
                         }
@@ -173,11 +170,22 @@ consumer_secret = os.environ.get('APISECRET')
 access_token = os.environ.get('ACCESSTOKEN')
 access_secret = os.environ.get('ACCESSSECRET')
 
-auth = OAuthHandler(consumer_key, consumer_secret)
-auth.set_access_token(access_token, access_secret)
+
 
 plot_tags()
-#
+
+auth = OAuthHandler(consumer_key, consumer_secret)
+auth.set_access_token(access_token, access_secret)
+api = tweepy.API(auth, parser=tweepy.parsers.JSONParser())
+listener = MyListener()
+#for i in range(0,99):
+#    tweets = api.user_timeline(screen_name='CNN',
+#                               include_rts=False,
+#                               exclude_replies=True, tweet_mode='extended')[i]
+#   listener.get_tweets(tweets)
+
+
 #twitter_stream = Stream(auth, MyListener())
 #twitter_stream.filter(locations=[-79.7619,40.4774,-71.7956,45.0159])
+
 
