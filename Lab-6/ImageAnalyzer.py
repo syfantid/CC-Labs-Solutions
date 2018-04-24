@@ -1,6 +1,7 @@
 import ast
 import base64
 import os
+from collections import Counter
 from venv import logger
 
 import googleapiclient.discovery
@@ -17,7 +18,7 @@ import plotly.graph_objs as go
 py.plotly.tools.set_credentials_file(username = os.environ.get('PLOTLY_USERNAME'), api_key = os.environ.get('PLOTLY_KEY'))
 
 TAG_TABLE = 'twitter-images'
-AWS_REGION = 'eu-west-1'
+AWS_REGION = 'eu-west-3'
 
 
 def get_image_from_tweet(status):
@@ -67,11 +68,13 @@ def get_tags(image_uri):
     # [END parse_response]
 
 def tags_to_json(tags_response):
+    data = []
     item = {}
     if(tags_response):
         for result in tags_response['responses'][0]['labelAnnotations']:
             item[result['description']] = str(result['score'])
-        jsonData = json.dumps(item)
+        data.append(item)
+        jsonData = json.dumps(data)
         return jsonData
     return None
 
@@ -98,27 +101,28 @@ def plot_tags():
     tweets = get_tweets_from_db()
     tag_scores = {}
     for tweet in tweets:
-        print(tweet)
-        for tweet_tags in tweet['tags']:
-            tweet_tags_dict = json.loads(tweet_tags)
-            for tag,score in tweet_tags_dict.items():
-                if not tag in tag_scores:
-                    tag_scores[tag] = score
-                else:
-                    tag_scores[tag] += score
+        tweet_tags_dict = json.loads(tweet['tags'])
+        for tag,score in tweet_tags_dict[0].items():
+            if not tag in tag_scores:
+                tag_scores[tag] = float(score)
+            else:
+                tag_scores[tag] += float(score)
 
     for k,v in tag_scores.items():
-        print(k + ": " + v + '\n')
+        print(k + ": " + str(v) + '\n')
 
-    # data = [go.Bar(
-    #     x=['giraffes', 'orangutans', 'monkeys'],
-    #     y=[20, 14, 23]
-    # )]
-    #
-    # py.iplot(data, filename='basic-bar')
+    top = Counter(tag_scores)
+    top = dict(top.most_common(20))
+
+    data = [go.Bar(
+        x=list(top.keys()),
+        y=list(top.values())
+    )]
+
+    py.plot(data, filename='basic-bar')
 
 
-class MyListener(StreamListener):
+class TwitterListener():
 
     image_counter = 0
 
@@ -138,9 +142,9 @@ class MyListener(StreamListener):
         tags_response = ""
         for image in image_list:
             # Check if we gathered 100 images already
-            self.image_counter += 1
-            if (self.image_counter > 100):
-                break
+            # self.image_counter += 1
+            # if (self.image_counter > 100):
+            #     break
 
             tags_response = get_tags(image)
 
@@ -154,7 +158,7 @@ class MyListener(StreamListener):
                         Item={
                             'tweet_id': a['id_str'],
                             'image_uri': image,
-                            'tags:' : tags_json
+                            'tags' : tags_json
                         }
                     )
                 except Exception as e:
@@ -171,21 +175,19 @@ access_token = os.environ.get('ACCESSTOKEN')
 access_secret = os.environ.get('ACCESSSECRET')
 
 
-
-plot_tags()
-
 auth = OAuthHandler(consumer_key, consumer_secret)
 auth.set_access_token(access_token, access_secret)
 api = tweepy.API(auth, parser=tweepy.parsers.JSONParser())
-listener = MyListener()
-#for i in range(0,99):
+listener = TwitterListener()
+# for i in range(0,99):
 #    tweets = api.user_timeline(screen_name='CNN',
 #                               include_rts=False,
 #                               exclude_replies=True, tweet_mode='extended')[i]
-#   listener.get_tweets(tweets)
+#    listener.get_tweets(tweets)
 
+# plot_tags()
 
-#twitter_stream = Stream(auth, MyListener())
-#twitter_stream.filter(locations=[-79.7619,40.4774,-71.7956,45.0159])
+# twitter_stream = Stream(auth, TwitterListener())
+# twitter_stream.filter(locations=[-79.7619,40.4774,-71.7956,45.0159])
 
 
