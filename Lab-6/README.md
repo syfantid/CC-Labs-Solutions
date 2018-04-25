@@ -99,3 +99,26 @@ What we did instead is that we connected through SSH to our EC2 instance and upl
 ![listener](img/twitterlistener.png)
 
 We also had to install the necesecary requirements (e.g. tweepy, boto, etc.) through `pip install -r requirements.txt`, in order to execute the python script. Given that Amazon's AMI Linux is slighlty different than Ubuntu we had some trouble figuring out how to set up e.g. install pip for Python 3.6 instead of 2.7 (default installation), but finally manage to overcome this difficulty by using the full path to the pip-3.6 executable instead of just the pip command. 
+
+###Task 6.3: Advanced Analytics as a Service in the Cloud (optional task)
+
+For this section, we collected tweets with images from specific user accounts. 'extended_entities' property of tweets was taken into account because if a tweet has picture, it is in 'extended_entities'. Inside 'extended_entities' only media with 'photo' type selected.
+Then the images collected from tweets were sent to Google Cloud Vision through api for analysis. Every tweet was labelled with tags then these tags were converted into JSON. For storing tweets and related tag set we used DynamoDB. After succesfully saving 100 images into database, we used Plotly api to plot the data we have. Total score of tags for all images were calculated and showed in bar plot.
+
+ ![DynamoDB](img/Twitter_DynamoDB.png)
+
+Examples;
+ 
+ @CNN:
+ 
+ ![CNN](img/CNN.png)
+ 
+ @EarthPix:
+ 
+ ![EarthPix](img/EarthPix.png)
+
+####Q63: What problems have you found developing this section? How did you solve them?
+
+When getting tweets from user timeline, we received index out of range error because in default, api.user_timeline() gets 20 tweets from user timeline. We have to add count=100 inside to get the last 100 tweets.
+
+####Q64: How long have you been working on this session (including the optional part)? What have been the main difficulties you have faced and how have you solved them?

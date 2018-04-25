@@ -18,7 +18,7 @@ import plotly.graph_objs as go
 py.plotly.tools.set_credentials_file(username = os.environ.get('PLOTLY_USERNAME'), api_key = os.environ.get('PLOTLY_KEY'))
 
 TAG_TABLE = 'twitter-images'
-AWS_REGION = 'eu-west-3'
+AWS_REGION = 'eu-west-1'
 
 
 def get_image_from_tweet(status):
@@ -29,6 +29,8 @@ def get_image_from_tweet(status):
             if 'media' in a['extended_entities'] and media['type'] == 'photo':
                 image_uri = media['media_url']
                 media_list.append(image_uri)
+    else:
+        pass
 
     return media_list
 
@@ -118,8 +120,12 @@ def plot_tags():
         x=list(top.keys()),
         y=list(top.values())
     )]
+    layout=dict(
+        tickangle=45
+    )
 
-    py.plot(data, filename='basic-bar')
+
+    py.plot(data, filename='basic-bar',layout=layout)
 
 
 class TwitterListener():
@@ -142,9 +148,9 @@ class TwitterListener():
         tags_response = ""
         for image in image_list:
             # Check if we gathered 100 images already
-            # self.image_counter += 1
-            # if (self.image_counter > 100):
-            #     break
+            self.image_counter += 1
+            if (self.image_counter > 100):
+                break
 
             tags_response = get_tags(image)
 
@@ -180,14 +186,9 @@ auth.set_access_token(access_token, access_secret)
 api = tweepy.API(auth, parser=tweepy.parsers.JSONParser())
 listener = TwitterListener()
 # for i in range(0,99):
-#    tweets = api.user_timeline(screen_name='CNN',
-#                               include_rts=False,
-#                               exclude_replies=True, tweet_mode='extended')[i]
+#    tweets = api.user_timeline(screen_name='EarthPix',include_rts=False,exclude_replies=True, tweet_mode = 'extended',count=100)[i]
 #    listener.get_tweets(tweets)
 
-# plot_tags()
-
-# twitter_stream = Stream(auth, TwitterListener())
-# twitter_stream.filter(locations=[-79.7619,40.4774,-71.7956,45.0159])
+plot_tags()
 
 
