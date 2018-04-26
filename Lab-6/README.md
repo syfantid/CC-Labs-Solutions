@@ -120,5 +120,7 @@ Examples;
 #### Q63: What problems have you found developing this section? How did you solve them?
 
 When getting tweets from user timeline, we received index out of range error because in default, api.user_timeline() gets 20 tweets from user timeline. We have to add count=100 inside to get the last 100 tweets.
+Also we had some issues with building JSON strings of valid JSON format. But after we searched online we found the solution.
 
 #### Q64: How long have you been working on this session (including the optional part)? What have been the main difficulties you have faced and how have you solved them?
+Approximately we spent 9 hours each for the whole lab 6 including optional part.
